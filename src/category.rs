@@ -1,21 +1,8 @@
-use diesel;
 use diesel::prelude::*;
 use diesel::sqlite::SqliteConnection;
 
-mod schema {
-    table! {
-        categories (id) {
-            id -> Nullable<Integer>,
-            name -> Text,
-            description -> Text,
-            url_key -> Text,
-            created_at -> Nullable<Date>,
-        }
-    }
-}
-
-use self::schema::categories;
-use self::schema::categories::dsl::{categories as all_categories};
+use schema::categories;
+use schema::categories::dsl::{categories as all_categories};
 
 #[table_name="categories"]
 #[derive(Serialize, Queryable, Insertable, Debug, Clone)]

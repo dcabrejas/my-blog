@@ -1,4 +1,4 @@
--- Your SQL goes here
+-- Create categories table
 CREATE TABLE IF NOT EXISTS categories (
   id integer PRIMARY KEY,
   name text NOT NULL UNIQUE,

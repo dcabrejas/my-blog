@@ -7,12 +7,16 @@ extern crate rocket_contrib;
 #[macro_use] extern crate serde_derive;
 
 mod db;
+mod schema;
 mod static_files;
 mod category;
+mod post;
 
 use rocket::Rocket;
 use rocket_contrib::Template;
+use rocket::response::{Redirect};
 use category::{Category};
+use post::{Post};
 
 #[get("/")]
 fn index(conn: db::Conn) -> Template {
@@ -25,9 +29,21 @@ fn index(conn: db::Conn) -> Template {
     Template::render("index", &Context { categories })
 }
 
-#[get("/hello/<name>")]
-fn hello(name: String) -> String {
-    format!("Hello, {}!", name.as_str())
+#[get("/post/<id>")]
+fn post_view(id: i32, conn: db::Conn) -> Result<Template, Redirect> {
+
+    #[derive(Debug, Serialize)]
+    struct Context {
+        post: Post
+    }
+
+    let result = Post::find_with_id(id, &conn);
+
+    if let Ok(post) = result {
+        Ok(Template::render("post", &Context { post }))
+    } else {
+        Err(Redirect::to("/"))
+    }
 }
 
 #[get("/category/<id>")]
@@ -35,9 +51,11 @@ fn category_view(id: u8) -> String {
     format!("Category id is : {}!", id)
 }
 
-#[get("/about")]
-fn about() -> &'static str {
-    "About me"
+#[get("/about-me")]
+fn about() -> Template {
+    #[derive(Debug, Serialize)]
+    struct Context {};
+    Template::render("about", Context{})
 }
 
 fn rocket() -> (Rocket) {
@@ -45,7 +63,7 @@ fn rocket() -> (Rocket) {
 
     let rocket = rocket::ignite()
         .manage(pool)
-        .mount("/", routes![index, hello, about, category_view, static_files::all])
+        .mount("/", routes![index, post_view, about, category_view, static_files::all])
         .attach(Template::fairing());
 
     rocket

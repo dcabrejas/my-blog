@@ -1,2 +1,2 @@
--- This file should undo anything in `up.sql`
+-- drop categories table
 DROP TABLE categories;
