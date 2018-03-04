@@ -1,0 +1,30 @@
+{% extends "base" %}
+
+{% block content %}
+<main class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 border-right">
+            <nav class="nav flex-column my-4">
+                {% for category in categories %}
+                <a class="nav-link active" href="#">{{ category.name }}</a>
+                {% endfor %}
+            </nav>
+        </div>
+        <div class="col-sm-9 my-4">
+            <h2 class="mb-4">Latest posts</h2>
+            <div class="mb-3">
+                <h5 class="mt-0 mb-1">List-based media object</h5>
+                Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+            </div>
+            <div class="mb-3">
+                <h5 class="mt-0 mb-1">List-based media object</h5>
+                Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+            </div>
+            <div>
+                <h5 class="mt-0 mb-1">List-based media object</h5>
+                Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock content %}

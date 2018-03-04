@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>My Blog</title>
+        <link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css" />
+    </head>
+    <body>
+        <!-- Nav -->
+        <nav class="navbar navbar-light bg-light">
+            <span class="navbar-brand mb-0 h1">My blog</span>
+        </nav>
+        {% block content %}{% endblock content %}
+        <footer class="container-fluid bg-light py-4">
+            <p class="text-center">Footer</p>
+        </footer>
+        <script src="static/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
