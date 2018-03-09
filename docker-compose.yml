@@ -1,0 +1,26 @@
+version: '3'
+volumes:
+  db_data: {}
+  caddy_cert: {}
+  caddyfile: {}
+services:
+  rust:
+    container_name: my-blog-rust
+    build: .
+    image: diegodocker/my-blog
+    environment:
+      - ROCKET_ADDRESS=0.0.0.0
+      - ROCKET_PORT=8080
+    volumes:
+      - db_data:/app/db
+  caddy:
+    container_name: my-blog-caddy
+    image: abiosoft/caddy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - caddy_cert:/root/.caddy
+      - caddyfile:/etc
+    links:
+      - rust
