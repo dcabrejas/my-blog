@@ -1,21 +1,24 @@
 table! {
     categories (id) {
-        id -> Nullable<Integer>,
-        name -> Text,
-        description -> Text,
-        url_key -> Text,
-        created_at -> Nullable<Date>,
+        id -> Integer,
+        name -> Varchar,
+        description -> Varchar,
+        url_key -> Varchar,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
     }
 }
 
 table! {
     posts (id) {
-        id -> Nullable<Integer>,
-        title -> Text,
+        id -> Integer,
+        title -> Varchar,
         body -> Text,
+        url_key -> Varchar,
         published -> Bool,
-        created_at -> Nullable<Date>,
         published_at -> Date,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
     }
 }
 

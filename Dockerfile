@@ -1,13 +1,17 @@
 FROM liuchong/rustup:stable
 
 RUN apt-get -y update
-RUN apt-get -y install libsqlite3-dev
+RUN apt-get -y install default-libmysqlclient-dev
+
+RUN cargo install diesel_cli --no-default-features --features mysql
+
+ADD . /app
 
 ENV ROCKET_ADDRESS=0.0.0.0
 ENV ROCKET_PORT=8080
 ENV DATABASE_URL=./db/myblog.db
 
-ADD . /app
+
 VOLUME ['/db']
 
 WORKDIR /app

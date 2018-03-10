@@ -1,10 +1,12 @@
 -- Create posts table
 CREATE TABLE IF NOT EXISTS posts (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  url_key TEXT NOT NULL,
-  title TEXT NOT NULL UNIQUE,
-  body TEXT NOT NULL,
-  published BOOLEAN NOT NULL DEFAULT 0,
-  created_at DATE DEFAULT (current_timestamp),
-  published_at DATE NOT NULL
+  id int(11) NOT NULL AUTO_INCREMENT,
+  title varchar(50) NOT NULL UNIQUE,
+  body text NOT NULL,
+  url_key varchar(50) NOT NULL UNIQUE,
+  published boolean NOT NULL DEFAULT 0,
+  published_at date NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE now(),
+  PRIMARY KEY(id)
 )

@@ -5,6 +5,7 @@ extern crate rocket;
 #[macro_use] extern crate diesel;
 extern crate rocket_contrib;
 #[macro_use] extern crate serde_derive;
+extern crate chrono;
 
 mod db;
 mod schema;
@@ -63,7 +64,8 @@ fn rocket() -> (Rocket) {
 
     let rocket = rocket::ignite()
         .manage(pool)
-        .mount("/", routes![index, post_view, about, category_view, static_files::all])
+        //.mount("/", routes![index, post_view, about, category_view, static_files::all])
+        .mount("/", routes![index, about, category_view, static_files::all])
         .attach(Template::fairing());
 
     rocket
