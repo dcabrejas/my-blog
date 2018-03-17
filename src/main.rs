@@ -16,40 +16,57 @@ mod post;
 use rocket::Rocket;
 use rocket_contrib::Template;
 use rocket::response::{Redirect};
+use chrono::prelude::*;
 use category::{Category};
-use post::{Post};
+use post::{Post, DisplayPost};
 
 #[get("/")]
 fn index(conn: db::Conn) -> Template {
     #[derive(Debug, Serialize)]
     struct Context {
-        categories: Vec<Category>
+        categories: Vec<Category>,
+        latest_posts: Vec<DisplayPost>
     }
 
     let categories = Category::all(&conn);
-    Template::render("index", &Context { categories })
+    let latest_posts = Post::latest(5, &conn);
+    Template::render("index", &Context { categories, latest_posts })
 }
 
-#[get("/post/<id>")]
-fn post_view(id: i32, conn: db::Conn) -> Result<Template, Redirect> {
+#[get("/post/<slug>")]
+fn post_view(slug: String, conn: db::Conn) -> Result<Template, Redirect> {
 
     #[derive(Debug, Serialize)]
     struct Context {
+        categories: Vec<Category>,
         post: Post
     }
 
-    let result = Post::find_with_id(id, &conn);
+    let categories = Category::all(&conn);
+    let result = Post::find_with_slug(slug.as_str(), &conn);
 
     if let Ok(post) = result {
-        Ok(Template::render("post", &Context { post }))
+        Ok(Template::render("post", &Context {categories,  post }))
     } else {
         Err(Redirect::to("/"))
     }
 }
 
-#[get("/category/<id>")]
-fn category_view(id: u8) -> String {
-    format!("Category id is : {}!", id)
+#[get("/category/<slug>")]
+fn category_view(slug: String, conn: db::Conn) -> Template {
+    #[derive(Debug, Serialize)]
+    struct Context {
+        categories: Vec<Category>,
+        category: Category,
+        posts: Vec<Post>
+    };
+
+    //todo remove unwrap and handle errors
+    let category = Category::find_with_slug(slug.as_str(), &conn).unwrap();
+    let posts = Post::find_with_category_id(category.id, &conn);
+    let categories = Category::all(&conn);
+
+    Template::render("category", &Context{ category, posts, categories })
 }
 
 #[get("/about-me")]
@@ -64,8 +81,7 @@ fn rocket() -> (Rocket) {
 
     let rocket = rocket::ignite()
         .manage(pool)
-        //.mount("/", routes![index, post_view, about, category_view, static_files::all])
-        .mount("/", routes![index, about, category_view, static_files::all])
+        .mount("/", routes![index, post_view, about, category_view, static_files::all])
         .attach(Template::fairing());
 
     rocket

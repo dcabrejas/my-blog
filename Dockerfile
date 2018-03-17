@@ -9,10 +9,7 @@ ADD . /app
 
 ENV ROCKET_ADDRESS=0.0.0.0
 ENV ROCKET_PORT=8080
-ENV DATABASE_URL=./db/myblog.db
-
-
-VOLUME ['/db']
+ENV DATABASE_URL=mysql://myblog:myblog@mysql/myblog
 
 WORKDIR /app
 

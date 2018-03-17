@@ -1,0 +1,43 @@
+version: '3'
+volumes:
+  mysql_data : {}
+  caddy_cert: {}
+  caddyfile: {}
+services:
+  rust:
+    container_name: my-blog-rust
+    build: .
+    image: diegodocker/my-blog
+    environment:
+      - ROCKET_ADDRESS=0.0.0.0
+      - ROCKET_PORT=8080
+      - DATABASE_URL=mysql://myblog:myblog@mysql/myblog
+    volumes:
+      - .:/app
+    depends_on:
+      - mysql
+  mysql:
+    container_name: my-blog-mysql
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=myblog
+      - MYSQL_USER=myblog
+      - MYSQL_PASSWORD=myblog
+    volumes:
+      - mysql_data:/var/lib/mysql
+  caddy:
+    container_name: my-blog-caddy
+    image: abiosoft/caddy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - caddy_cert:/root/.caddy
+      #- caddyfile:/etc
+      - ./Caddyfile:/etc/Caddyfile
+    links:
+      - rust
