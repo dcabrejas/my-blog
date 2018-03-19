@@ -14,8 +14,9 @@ ENV DATABASE_URL=mysql://myblog:myblog@mysql/myblog
 WORKDIR /app
 
 RUN rustup default nightly
-RUN cargo build --release
+
+RUN cargo build
 
 EXPOSE 8080
 
-CMD ["cargo", "run", "--release"]
+CMD ["cargo", "run"]

@@ -5,15 +5,16 @@ RUN apt-get -y install default-libmysqlclient-dev
 
 RUN cargo install diesel_cli --no-default-features --features mysql
 
-ADD . /app
+ADD ../../. /app
 
 ENV ROCKET_ADDRESS=0.0.0.0
 ENV ROCKET_PORT=8080
-ENV DATABASE_URL=mysql://myblog:myblog@mysql/myblog
+#ENV DATABASE_URL=mysql://myblog:myblog@mysql/myblog
 
 WORKDIR /app
 
 RUN rustup default nightly
+
 RUN cargo build --release
 
 EXPOSE 8080

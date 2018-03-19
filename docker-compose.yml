@@ -2,11 +2,12 @@ version: '3'
 volumes:
   mysql_data : {}
   caddy_cert: {}
-  caddyfile: {}
 services:
   rust:
     container_name: my-blog-rust
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile-dev
     image: diegodocker/my-blog
     environment:
       - ROCKET_ADDRESS=0.0.0.0
@@ -32,12 +33,15 @@ services:
   caddy:
     container_name: my-blog-caddy
     image: abiosoft/caddy
+    environment:
+        - HOST=localhost
+        - PORT=80
     ports:
       - "80:80"
       - "443:443"
+    restart: unless-stopped
     volumes:
       - caddy_cert:/root/.caddy
-      #- caddyfile:/etc
-      - ./Caddyfile:/etc/Caddyfile
+      - ./.docker/caddy/Caddyfile:/etc/Caddyfile
     links:
       - rust

@@ -1,0 +1,7 @@
+diegocabrejas.tk:443
+tls dcabrejas@icloud.com
+gzip
+log /var/log/access.log
+errors /var/log/error.log
+proxy / rust:8080
+

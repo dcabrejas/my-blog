@@ -1,3 +1,4 @@
+.docker
 target
 Dockerfile
 docker-compose.yml

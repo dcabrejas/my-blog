@@ -1,0 +1,8 @@
+diegocabrejas.tk:443
+tls self_signed
+gzip
+log /var/log/access.log
+errors /var/log/error.log
+
+proxy / rust:8080
+
