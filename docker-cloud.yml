@@ -1,0 +1,32 @@
+rust:
+  image: diegodocker/my-blog
+  environment:
+    - ROCKET_ADDRESS=0.0.0.0
+    - ROCKET_PORT=8080
+    - DATABASE_URL=mysql://username:password@host/dbname
+  links:
+    - mysql
+  restart: on-failure
+mysql:
+  image: mysql:5.7
+  environment:
+    - MYSQL_ROOT_PASSWORD=value
+    - MYSQL_DATABASE=value
+    - MYSQL_USER=value
+    - MYSQL_PASSWORD=value
+  ports:
+    - "3306:3306"
+  restart: on-failure
+  volumes:
+    - /var/lib/mysql
+caddy:
+  image: diegodocker/caddy
+  links:
+    - rust
+  ports:
+    - "80:80"
+    - "443:443"
+  restart: on-failure
+  volumes:
+    - /var/lib/mysql
+    - /root/.caddy
